@@ -1,0 +1,41 @@
+//importar http do k6 para m[odulo de execução de requisições
+import http from 'k6/http';
+//função que faz parte do k6 que faz aguadar por alguns segundos
+import { sleep, check } from 'k6';
+
+//criar já exportando a constante options - k6 vai entender onde estão as opções que estão relacionados ao teste
+export const options = {
+    iterations: 50,
+    thresholds: {
+        http_req_duration: ['p(90)<10', 'max<1'],
+        http_req_failed: ['rate<0.01']
+    }
+}
+
+
+export default function () {
+  const url = 'http://localhost:3000/login';
+
+  const payload = JSON.stringify({
+    username: 'julio.lima',
+    senha: '123456',
+  });
+
+  const params = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+
+  const res = http.post(url, payload, params);
+
+  check(res, {
+    'Validar que o Status é 200': (r) => r.status === 200,
+    'Validar que o Token é string': (r) => typeof(r.json().token) == 'string'
+  })
+
+  sleep(1);
+  
+}
+
+//
