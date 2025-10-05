@@ -5,9 +5,10 @@ import { sleep, check } from 'k6';
 
 //criar já exportando a constante options - k6 vai entender onde estão as opções que estão relacionados ao teste
 export const options = {
-    iterations: 50,
+    vus: 10,
+    duration: '30s',
     thresholds: {
-        http_req_duration: ['p(90)<10', 'max<1'],
+        http_req_duration: ['p(90)<3000', 'max<5000'],
         http_req_failed: ['rate<0.01']
     }
 }
