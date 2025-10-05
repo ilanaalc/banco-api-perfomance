@@ -2,6 +2,7 @@
 import http from 'k6/http';
 //função que faz parte do k6 que faz aguadar por alguns segundos
 import { sleep, check } from 'k6';
+const postLogin = JSON.parse(open('../fixtures/postLogin.json'));
 
 //criar já exportando a constante options - k6 vai entender onde estão as opções que estão relacionados ao teste
 export const options = {
@@ -22,10 +23,7 @@ export const options = {
 export default function () {
   const url = 'http://localhost:3000/login';
 
-  const payload = JSON.stringify({
-    username: 'julio.lima',
-    senha: '123456',
-  });
+  const payload = JSON.stringify(postLogin);
 
   const params = {
     headers: {
